@@ -1,6 +1,6 @@
 use std::fs::read_to_string;
 
-use chrono::{DateTime, FixedOffset, NaiveDate, TimeZone, Utc};
+use chrono::{DateTime, FixedOffset, NaiveDate, Utc};
 
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
@@ -13,6 +13,7 @@ struct RawEvent {
 fn main() -> Result<()> {
     let args: Vec<String> = std::env::args().collect();
     let ical = read_to_string(&args[1])?;
+    let threshold = DateTime::parse_from_rfc3339(&args[2])?;
 
     let mut events = vec![];
 
@@ -49,8 +50,6 @@ fn main() -> Result<()> {
             }
         }
     }
-
-    let threshold = DateTime::parse_from_rfc3339("2022-01-10T00:00:00+09:00")?;
 
     let mut events: Vec<_> = events
         .into_iter()
